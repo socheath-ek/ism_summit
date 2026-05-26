@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+{% block title %}Registrations – Admin{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 admin-sidebar py-4 px-3">
+            <h6 class="text-uppercase text-warning mb-3 small">Navigation</h6>
+            <ul class="nav flex-column gap-2">
+                <li><a href="{{ path('app_admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="{{ path('app_admin_registrations') }}"><i class="fas fa-list"></i> Registrations</a></li>
+                <li><a href="{{ path('app_home') }}"><i class="fas fa-eye"></i> View Site</a></li>
+                <li><a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+        <main class="col-md-10 py-4 px-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 style="color:var(--ism-blue)">Registrations – {{ activeSummit ? activeSummit.city : 'N/A' }}</h2>
+                <a href="{{ path('app_admin_export_excel') }}" class="btn btn-success btn-sm">
+                    <i class="fas fa-file-excel"></i> Export Excel
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th><a href="?sort=lastName&dir={{ sort == 'lastName' and dir == 'ASC' ? 'DESC' : 'ASC' }}" style="color:white">Name</a></th>
+                            <th><a href="?sort=email&dir={{ sort == 'email' and dir == 'ASC' ? 'DESC' : 'ASC' }}" style="color:white">Email</a></th>
+                            <th><a href="?sort=company&dir={{ sort == 'company' and dir == 'ASC' ? 'DESC' : 'ASC' }}" style="color:white">Company</a></th>
+                            <th><a href="?sort=mealPreference&dir={{ sort == 'mealPreference' and dir == 'ASC' ? 'DESC' : 'ASC' }}" style="color:white">Meal</a></th>
+                            <th><a href="?sort=status&dir={{ sort == 'status' and dir == 'ASC' ? 'DESC' : 'ASC' }}" style="color:white">Status</a></th>
+                            <th><a href="?sort=registeredAt&dir={{ sort == 'registeredAt' and dir == 'ASC' ? 'DESC' : 'ASC' }}" style="color:white">Date</a></th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reg in registrations %}
+                        <tr>
+                            <td>{{ reg.fullName }}<br><small class="text-muted">{{ reg.ticketNumber }}</small></td>
+                            <td>{{ reg.email }}</td>
+                            <td>{{ reg.company }}</td>
+                            <td><span class="badge bg-secondary">{{ reg.mealPreference }}</span></td>
+                            <td>
+                                {% if reg.status == 'confirmed' %}
+                                    <span class="badge bg-success">Confirmed</span>
+                                {% elseif reg.status == 'cancelled' %}
+                                    <span class="badge bg-danger">Cancelled</span>
+                                {% else %}
+                                    <span class="badge bg-warning">{{ reg.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ reg.registeredAt|date('d.m.Y H:i') }}</td>
+                            <td>
+                                {% if reg.status == 'confirmed' %}
+                                <form method="post" action="{{ path('app_admin_cancel_registration', {id: reg.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ reg.id) }}">
+                                    <button class="btn btn-warning btn-sm" onclick="return confirm('Cancel?')">
+                                        <i class="fas fa-ban"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
+                                <form method="post" action="{{ path('app_admin_delete_registration', {id: reg.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reg.id) }}">
+                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Delete?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="7" class="text-center text-muted">No registrations yet.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

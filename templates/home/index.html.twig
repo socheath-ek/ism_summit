@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+{% block title %}ISM Data Science Summit – Welcome{% endblock %}
+{% block body %}
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">ISM Data Science Summit</h1>
+        {% if summit %}
+            <p class="lead mb-1"><i class="fas fa-map-marker-alt"></i> {{ summit.locationName }}, {{ summit.city }}</p>
+            <p class="lead mb-4"><i class="fas fa-calendar"></i> {{ summit.eventDate|date('d. F Y') }}</p>
+            {% if not summit.isFull %}
+                <span class="badge bg-success fs-6 mb-3">{{ summit.remainingCapacity }} spots remaining</span><br>
+                <a href="{{ path('app_register') }}" class="btn btn-ism btn-lg px-5 mt-2">
+                    <i class="fas fa-ticket-alt"></i> Register Now – Free
+                </a>
+            {% else %}
+                <span class="badge bg-danger fs-6">Fully Booked</span>
+            {% endif %}
+        {% else %}
+            <p class="lead">No upcoming summit announced. Check back soon!</p>
+        {% endif %}
+    </div>
+</section>
+{% if summit %}
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body py-4">
+                        <i class="fas fa-users fa-3x mb-3" style="color:var(--ism-gold)"></i>
+                        <h5>Capacity</h5>
+                        <p class="text-muted">{{ summit.registrations|length }} / {{ summit.capacity }} registered</p>
+                        <div class="progress capacity-bar">
+                            <div class="progress-bar" style="width: {{ summit.capacity > 0 ? (summit.registrations|length / summit.capacity * 100)|round : 0 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body py-4">
+                        <i class="fas fa-map-marker-alt fa-3x mb-3" style="color:var(--ism-gold)"></i>
+                        <h5>Location</h5>
+                        <p class="text-muted">{{ summit.address }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body py-4">
+                        <i class="fas fa-tag fa-3x mb-3" style="color:var(--ism-gold)"></i>
+                        <h5>Admission</h5>
+                        <p class="text-muted">Free of charge – register now!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+<div id="capacity-alert" class="container my-2" style="display:none">
+    <div class="alert alert-warning">Only <strong id="spots-left"></strong> spots left!</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+$(function() {
+    $.get("{{ path('app_check_capacity') }}", function(data) {
+        if (data.remaining <= 10 && data.remaining > 0) {
+            $('#spots-left').text(data.remaining);
+            $('#capacity-alert').fadeIn();
+        }
+    });
+});
+</script>
+{% endblock %}

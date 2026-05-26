@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 admin-sidebar py-4 px-3">
+            <h6 class="text-uppercase text-warning mb-3 small">Navigation</h6>
+            <ul class="nav flex-column gap-2">
+                <li><a href="{{ path('app_admin_dashboard') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="{{ path('app_admin_registrations') }}"><i class="fas fa-list"></i> Registrations</a></li>
+                <li><a href="{{ path('app_home') }}"><i class="fas fa-eye"></i> View Site</a></li>
+                <li><a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+        <main class="col-md-10 py-4 px-4">
+            <h2 style="color:var(--ism-blue)">Dashboard</h2>
+            {% if activeSummit %}
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm text-center p-3">
+                        <h3 style="color:var(--ism-gold)">{{ activeSummit.registrations|length }}</h3>
+                        <p class="mb-0 text-muted">Total Registrations</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm text-center p-3">
+                        <h3 style="color:var(--ism-gold)">{{ activeSummit.remainingCapacity }}</h3>
+                        <p class="mb-0 text-muted">Spots Remaining</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm text-center p-3">
+                        <h3 style="color:var(--ism-gold)">{{ activeSummit.city }}</h3>
+                        <p class="mb-0 text-muted">Active Summit</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm text-center p-3">
+                        <h3 style="color:var(--ism-gold)">{{ activeSummit.eventDate|date('d.m.Y') }}</h3>
+                        <p class="mb-0 text-muted">Event Date</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <h5>All Summits</h5>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr><th>City</th><th>Date</th><th>Capacity</th><th>Registered</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    {% for s in summits %}
+                    <tr>
+                        <td>{{ s.city }}</td>
+                        <td>{{ s.eventDate|date('d.m.Y') }}</td>
+                        <td>{{ s.capacity }}</td>
+                        <td>{{ s.registrations|length }}</td>
+                        <td>{% if s.isActive %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Inactive</span>{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+    </div>
+</div>
+{% endblock %}

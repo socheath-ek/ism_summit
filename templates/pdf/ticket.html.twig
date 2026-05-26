@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+    body { font-family: Arial, sans-serif; color: #1C3D6E; margin: 40px; }
+    .header { background: #1C3D6E; color: white; padding: 20px; text-align: center; }
+    .ticket-box { border: 3px solid #C9A84C; border-radius: 8px; padding: 30px; margin: 20px 0; }
+    .ticket-number { font-size: 24px; font-weight: bold; color: #C9A84C; letter-spacing: 3px; }
+    .info-table td { padding: 6px 12px; }
+    .qr-section { text-align: center; margin: 20px 0; }
+    .footer { font-size: 11px; color: #888; text-align: center; margin-top: 30px; }
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>ISM DATA SCIENCE SUMMIT</h1>
+    <h3>{{ registration.summit.city }} · {{ registration.summit.eventDate|date('d. F Y') }}</h3>
+</div>
+<div class="ticket-box">
+    <p style="font-size:18px; font-weight:bold;">ADMISSION TICKET</p>
+    <div class="ticket-number">{{ registration.ticketNumber }}</div>
+    <hr style="border-color:#C9A84C;">
+    <table class="info-table" width="100%">
+        <tr><td><strong>Name:</strong></td><td>{{ registration.fullName }}</td></tr>
+        <tr><td><strong>Company:</strong></td><td>{{ registration.company }}</td></tr>
+        <tr><td><strong>Email:</strong></td><td>{{ registration.email }}</td></tr>
+        <tr><td><strong>Meal:</strong></td><td>{{ registration.mealPreference|capitalize }}</td></tr>
+        <tr><td><strong>Location:</strong></td><td>{{ registration.summit.locationName }}</td></tr>
+        <tr><td><strong>Address:</strong></td><td>{{ registration.summit.address }}</td></tr>
+    </table>
+    <div class="qr-section">
+        <img src="data:image/png;base64,{{ qrBase64 }}" width="150" height="150" alt="QR Code">
+        <p style="font-size:11px; color:#888;">Scan at check-in</p>
+    </div>
+</div>
+<div class="footer">
+    ISM – International School of Management | ism.de<br>
+    Please bring this ticket (printed or digital) to the event.
+</div>
+</body>
+</html>

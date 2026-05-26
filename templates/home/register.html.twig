@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+{% block title %}Register – ISM Summit{% endblock %}
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header text-white py-3" style="background:var(--ism-blue)">
+                    <h4 class="mb-0"><i class="fas fa-ticket-alt"></i> Register for ISM Summit {{ summit.city }}</h4>
+                    <small>{{ summit.eventDate|date('d. F Y') }} · {{ summit.locationName }}</small>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> <strong>{{ summit.remainingCapacity }}</strong> spots remaining out of {{ summit.capacity }}.
+                    </div>
+                    {{ form_start(form) }}
+                    <div class="row g-3">
+                        <div class="col-md-6">{{ form_row(form.firstName) }}</div>
+                        <div class="col-md-6">{{ form_row(form.lastName) }}</div>
+                        <div class="col-md-6">{{ form_row(form.email) }}</div>
+                        <div class="col-md-6">{{ form_row(form.phone) }}</div>
+                        <div class="col-md-6">{{ form_row(form.company) }}</div>
+                        <div class="col-md-6">{{ form_row(form.jobTitle) }}</div>
+                        <div class="col-12">{{ form_row(form.mealPreference) }}</div>
+                        <div class="col-12">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6>Additional Options</h6>
+                                    <div class="form-check mb-2">
+                                        {{ form_widget(form.needsParking) }}
+                                        {{ form_label(form.needsParking) }}
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        {{ form_widget(form.needsAccommodation) }}
+                                        {{ form_label(form.needsAccommodation) }}
+                                    </div>
+                                    <hr>
+                                    <div class="form-check mb-2">
+                                        {{ form_widget(form.newsletterConsent) }}
+                                        {{ form_label(form.newsletterConsent) }}
+                                    </div>
+                                    <div class="form-check">
+                                        {{ form_widget(form.dataProtectionConsent) }}
+                                        {{ form_label(form.dataProtectionConsent) }}
+                                        {{ form_errors(form.dataProtectionConsent) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-ism btn-lg">
+                            <i class="fas fa-check-circle"></i> Complete Registration
+                        </button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
